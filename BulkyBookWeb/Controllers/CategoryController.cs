@@ -23,4 +23,19 @@ public class CategoryController : Controller
     {
         return View();
     }
+
+    //creo la post
+    [HttpPost] //serve perchè di default è una get
+    [ValidateAntiForgeryToken] //evitare che l'utente la crei dall'url
+    //modelstate -> controlla se i dati sono coerenti al model che ho fatto
+    public IActionResult Create(Category category)
+    {
+        if(ModelState.IsValid)
+        {
+            _db.Categories.Add(category);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        return View(category);
+    }
 }
