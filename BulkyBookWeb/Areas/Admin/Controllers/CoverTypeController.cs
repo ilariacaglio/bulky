@@ -105,5 +105,3 @@ public class CoverTypeController:Controller
         return RedirectToAction(nameof(Index));
     }
 }
-
-
