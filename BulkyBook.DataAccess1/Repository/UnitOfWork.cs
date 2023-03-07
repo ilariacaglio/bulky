@@ -16,6 +16,8 @@ namespace BulkyBook.DataAccess1.Repository
 
         public ICoverTypeRepository CoverType { get; private set; } = null!;
 
+        public IProductRepository Product { get; private set; } = null!;
+
         public void Save()
         {
             _db.SaveChanges();
