@@ -3,6 +3,7 @@ using BulkyBook.DataAccess1;
 using BulkyBook.DataAccess1.Repository.IRepository;
 using BulkyBook.Models1;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BulkyBookWeb.Controllers;
 
@@ -18,48 +19,30 @@ public class ProductController:Controller
     //GET
     public IActionResult Index()
     {
-        IEnumerable<Product> objCoverTypeList = _unitOfWork.Product.GetAll();
+        IEnumerable<CoverType> objCoverTypeList = _unitOfWork.CoverType.GetAll();
         return View(objCoverTypeList);
     }
 
     //GET
-    public IActionResult Create()
+    public IActionResult Upsert(int? id)
     {
-        return View();
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Create(Product obj)
-    {
-        if (ModelState.IsValid)
-        {
-            _unitOfWork.Product.Add(obj);
-            _unitOfWork.Save();
-            TempData["success"] = "Product created successfully";
-            return RedirectToAction(nameof(Index));
-        }
-        return View(obj);
-    }
-
-    //GET
-    public IActionResult Edit(int? id)
-    {
+        Product product = new();
+       
         if (id == null || id == 0)
         {
-            return NotFound();
+            //create product
+            return View(product);
         }
-        var productFromDbFirst = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
-        if (productFromDbFirst == null)
+        else
         {
-           return NotFound();
+            //update product
         }
-        return View(productFromDbFirst);
+        return View(product);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Edit(Product obj)
+    public IActionResult Upsert(Product obj)
     {
         if (ModelState.IsValid)
         {
