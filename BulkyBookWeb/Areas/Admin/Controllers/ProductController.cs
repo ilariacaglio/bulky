@@ -2,6 +2,7 @@
 using BulkyBook.DataAccess1;
 using BulkyBook.DataAccess1.Repository.IRepository;
 using BulkyBook.Models1;
+using BulkyBook.Models1.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -26,18 +27,32 @@ public class ProductController:Controller
     //GET
     public IActionResult Upsert(int? id)
     {
-        Product product = new();
-       
+        ProductVM productVM = new() {
+            Product = new Product(),
+            CategoryList = _unitOfWork.Category.GetAll().Select(
+            u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            }),
+        CoverTypeList = _unitOfWork.CoverType.GetAll().Select(
+            u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            }),
+        };
+        
         if (id == null || id == 0)
         {
             //create product
-            return View(product);
+            return View(productVM);
         }
         else
         {
             //update product
         }
-        return View(product);
+        return View(productVM);
     }
 
     [HttpPost]
